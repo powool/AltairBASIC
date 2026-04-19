@@ -37,10 +37,10 @@ IFE     LENGTH-2,<
 DEFINE  SYNCHK(A),<RST  1
                 A>
 DEFINE  CHRGET,<RST     2>
-DEFINE  OUTCHR,<RST     3
-DEFINE  COMPAR,<RST     4
-DEFINE  FSIGN,<RST      5
-DEFINE  PUSHM,<RST      6
+DEFINE  OUTCHR,<RST     3>
+DEFINE  COMPAR,<RST     4>
+DEFINE  FSIGN,<RST      5>
+DEFINE  PUSHM,<RST      6>
 DEFINE  PUSHFM,<PUSHM
                 PUSHM>
 DEFINE  ACLRF,<
@@ -103,7 +103,7 @@ LPTLEN==72                      ;WIDTH OF LINE-PRINTER
 LINLEN==72                      ;TELETYPE LINE LENGTH
 BUFLEN==72                      ;INPUT BUFFER SIZE
 STRSIZ==4
-IFE     LENGTH-2<STRSIZ==3>
+IFE     LENGTH-2,<STRSIZ==3>
 NUMTMP==3                       ;NUMBER OF STRING TEMPORARIES
 IFE     LENGTH-2,<NUMTMP=5>
 CR==13
@@ -848,7 +848,7 @@ IFN     STRING,<
         ADR(CHR$)
         ADR(LEFT$)
         ADR(RIGHT$)
-        ADR(MIDS$)>
+        ADR(MID$)>
 DEFINE ADRP(X),<ADR(X)>
 IFE     LENGTH-2,<
 DEFINE ADRP(X),<>>
@@ -1043,7 +1043,7 @@ IFE     LENGTH-2,<
         DCL"OUT OF DATA"
         ERROD==Q"
         DCE"FC"
-        "DCL"ILLEGAL FUNCTION CALL"
+        DCL"ILLEGAL FUNCTION CALL"
         ERRFC==Q
         DCE"OV"
         DCL"OVERFLOW"
@@ -1205,7 +1205,7 @@ IFE     LENGTH-2,<
         BLOCK   1               ;[TEMPORARY LEAST SIGNIFICANT BYTE]
 ARGLO:  BLOCK   7               ;[LOCATION OF SECOND ARGUMENT FOR DOUBLE
 ARG:    BLOCK   1>              ; PRECISION]
-FBUFFR  BLOCK   13              ;BUFFER FOR FOUT
+FBUFFR: BLOCK   13              ;BUFFER FOR FOUT
 IFE     LENGTH-2,<BLOCK 35-13>
 PAGE
 SUBTTL  TEXT CONSTANTS FOR PRINT OUT
@@ -1360,9 +1360,9 @@ LEPSKP: CALL    REM             ;SKIP AN ERROR MESSAGE
         DCR     E               ;DECREMENT ERROR COUNT
         INX     H               ;SKIP OVER THIS ERROR MESSAGE
         JNZ     LEPSKP>         ;SKIP SOME MORE
-IFN     LENGTH-2<
+IFN     LENGTH-2,<
         MOV     D,A             ;GET ZERO INTO D
-        MVI     A,"7"           ;START OF ERROR MESSAGE
+        MVI     A,"?"           ;START OF ERROR MESSAGE
         OUTCHR                  ;TYPE IT
         DAD     D               ;ADD IN ERROR CODE
         MOV     A,M             ;GET FIRST ERROR CHARACTER
@@ -1540,7 +1540,7 @@ FNDLIN: LHLD    TXTTAB          ;GET POINTER TO START OF TEXT
 LOOP:   MOV     B,H             ;IF EXITING BECAUSE OF END OF PROGRAM,
                                 ;SET [B,C] TO POINT TO DOUBLE ZEROES.
         MOV     C,L
-        MOD     A,M             ;GET WORD POINTER TO
+        MOV     A,M             ;GET WORD POINTER TO
         INX     H               ;BUMP POINTER
         ORA     M               ;GET 2ND BYTE
         DCX     H               ;GO BACK
@@ -1775,7 +1775,7 @@ GOODCH: MOV     C,A
         MVI     A,7             ;GET A BELL IN CASE LINE TOO LONG.
         JNC     OUTBEL          ;LINE TOO LONG, RING BELL.
         MOV     A,C
-        MOV     M,C             STORE THIS CHARACTER
+        MOV     M,C             ;STORE THIS CHARACTER
         INX     H
         INR     B
 OUTBEL:
@@ -2055,7 +2055,7 @@ IFN     LPTSW,<XRA      A       ;FOR PRINT TO GO TO TTY AFTER LPRINT
         ORA     M               ;OR IN HIGH PART
         INX     H
         JZ      ENDCON          ;RAN OFF THE END -- OK
-        MOVE    E,M
+        MOV     E,M
         INX     H
         MOV     D,M             ;GET LINE # IN [D,E]
         XCHG                    ;[H,L]=LINE #
@@ -2148,7 +2148,7 @@ ENDCON: PUSH    PSW             ;SAVE THE MESSAGE FLAG
         JZ      DIRIS           ;IF NOT SET UP FOR CONTINUE
         SHLD    OLDLIN          ;SAVE OLD LINE #
         LHLD    TEMP            ;GET POINTER TO START OF STATEMENT
-        OLDTXT                  ;SAVE IT
+        SHLD    OLDTXT          ;SAVE IT
 DIRIS:
 IFN     CONTRW,<
         XRA     A
@@ -2602,7 +2602,7 @@ IFN     LENGTH,<
         SYNCHK  THENTK          ;MUST HAVE A THEN
         DCX     H
 OKGOTO:
-IFE:    LENGTH,<
+IFE     LENGTH,<
         POP     PSW
         POPR                    ;POP OFF NUMBER
 IFN     STRING,<
@@ -3007,7 +3007,7 @@ IFN     LENGTH,<
         RET
 EXIGNT: DC"?EXTRA IGNORED"
         ACRLF
-        O>
+        0>
 ;
 ; SUBROUTINE TO FIND DATA
 ; IN THE 4K "DATA" MUST BE AT THE START OF THE LINE
@@ -3067,7 +3067,7 @@ SUBTTL NEXT CODE
 ; TOTAL 16 BYTES
 ;
 NEXT:
-IFN     LENGTH,<LXI     0,$CODE>;FOR THE "NEXT"
+IFN     LENGTH,<LXI     D,$CODE>;FOR THE "NEXT"
                                 ;STATEMENT WITHOUT ANY ARGS
                                 ;WE CALL FNDFOR WITH [D,E]=0
 NEXTC:
@@ -3458,7 +3458,7 @@ DODSP:  LDA     OPRTYP          ;RECALL WHICH OPERAND IT WAS
 FACDBL: PUSH    B               ;SAVE THE STACK VALUE TYPE
         CALL    VMOVAF          ;MOVE THE FAC INTO ARG
         POP     PSW             ;POP THE STACK VALUE TYPE INTO [A]
-        STA     VALTYP          PUT IT IN VALTYP FOR THE FORCE
+        STA     VALTYP          ;PUT IT IN VALTYP FOR THE FORCE
                                 ;ROUTINE
         CPI     4               ;SEE IF ITS SINGLE, SO WE KNOW
                                 ;HOW TO POP THE VALUE OFF
@@ -4116,7 +4116,7 @@ LOPFD2: POP     B               ;[B,C]=LENGTH OF LAST VARIABLE
         COMPAR                  ;SEE IF WE ARE THERE
         XCHG                    ;[H,L] GETS SEARCH POINT
         POP     D               ;POP OFF VARIABLE LOOKS
-        JZ      NOTFDO          ;COULDN'T FIND IT
+        JZ      NOTFDD          ;COULDN'T FIND IT
         PUSHM                   ;PUT ON LOOKS OF VARIABLE
                                 ;WE ARE EXAMINING
         XTHL                    ;PUT [H,L] ON THE STACK AND
@@ -4182,7 +4182,7 @@ ZERIT2: DCX     H
         JMP     MAKDFN>         ;FINISH UP
 PAGE
 SUBTTL  MULTIPLE DIMENSION CODE
-IFN     MULDIM,
+IFN     MULDIM,<
 ;
 ; FORMAT OF ARRAYS IN CORE
 ;
@@ -4497,7 +4497,7 @@ SNGFLT: MOV     B,A             ;RETURN FLOATING 1 BYTE
         JMP     GIVABF>>        ;GIVING 0-255
 PAGE
 SUBTTL  SIMPLE-USER-DEFINED-FUNCTION CODE
-IFN     FUNCTS,
+IFN     FUNCTS,<
 ;
 ; NOTE ONLY SINGLE ARGUMENTS ARE ALLOWED TO FUNCTIONS
 ; AND FUNCTIONS MUST BE OF THE SINGLE LINE FORM:
@@ -4688,7 +4688,7 @@ STRGET: INX     H
         JZ      STRFIN          ;TEST
         CMP     D
         JZ      STRFIN
-        CMP     0               ;CLOSING QUOTE
+        CMP     B               ;CLOSING QUOTE
         JNZ     STRGET          ;NO, GO BACK FOR MORE
 STRFIN: CPI     34              ;IF QUOTE TERMINATES THE STRING
         CZ      CHRGTR          ;SKIP OVER THE QUOTE
@@ -5141,7 +5141,7 @@ MID$:   XCHG                    ;PUT THE TEXT POINTER IN [H,L]
         CPI     ")"
         JZ      MID2            ;[E] SAYS USE ALL CHARS
                                 ;IF ONE ARGUMENT THIS IS CORRECT
-        SYNCHK  442             ;COMMA? MUST DELINEATE 3RD ARG.
+        SYNCHK  44              ;COMMA? MUST DELINEATE 3RD ARG.
         CALL    GETBYT          ;GET ARGUMENT  IN  [E]
 MID2:   SYNCHK  ")"             ;MUST BE FOLLOWED BY )
         POP     PSW             ;GET OFFSET BACK IN A
@@ -5153,7 +5153,7 @@ MID2:   SYNCHK  ")"             ;MUST BE FOLLOWED BY )
         MVI     B,0             ;ASSUME NULL LENGTH STR
         RNC                     ;YES, JUST USE NULL STR
         MOV     C,A             ;SAVE OFFSET OF CHARACTER POINTER
-        MOC     A,M             ;GET PRESENT LEN OF STR
+        MOV     A,M             ;GET PRESENT LEN OF STR
         SUB     C               ;SUBTRACT INDEX (2ND ARG)
         CMP     E               ;IS IT TRUNCATION
         MOV     B,A             ;GET CALCED LENGTH IN B
@@ -5230,7 +5230,7 @@ IFE     LENGTH-2,<
 GETBYT: CALL    FRMEVL
 CONINT: PUSH    H
         CALL    FRCINT
-        ZCHG
+        XCHG
         POP     H>
 IFN     LENGTH-2,<
 GETBYT: CALL    FRMNUM          ;READ FORMULA INTO THE FAC.
@@ -5905,7 +5905,7 @@ FADD3:  XRA     A               ;SBUBTRACT NUBMERS, NEGATE UNDERFLOW BYTE
         MOV     D,A
         INX     H               ;UPDATE POINTER TO HIGH ORDERS
         MOV     A,M             ;SUBTRACT HIGH ORDERS
-        ABB     C
+        SBB     C
         MOV     C,A
         ;BECAUSE WE WANT A POSITIVE MANTISSA, CHECK IF WE HAVE TO NEGATE THE
         ; NUMBER
@@ -5971,7 +5971,7 @@ NORM3:  JP      NORM2           ;WE HAVE MORE NORMALIZATION TO DO
         MOV     B,L
         ORA     A               ;CHECK IF WE DID NO SHIFTING
         JZ      ROUND>
-        LXI     H,FAC           LOOK AT FAC'S EXPONENT
+        LXI     H,FAC           ;LOOK AT FAC'S EXPONENT
         ADD     M               ;UPDATE EXPONENT
         MOV     M,A
         JNC     ZERO            ;CHECK FOR UNDERFLOW
@@ -6047,7 +6047,7 @@ NEGR:   LXI     H,FAC+1         ;NEGATE FAC
         MOV     B,A             ;SAVE IT
         MOV     A,L             ;GET A ZERO
         SBB     E               ;NEGATE NEXT HIGHEST ORDER
-        MOV     E,A             LSAVE IT
+        MOV     E,A             ;SAVE IT
         MOV     A,L             ;GET A ZERO
         SBB     D               ;NEGATE NEXT HIGHEST ORDER
         MOV     D,A             ;SAVE IT
@@ -6340,7 +6340,7 @@ FDIV2:  POP     B               ;WE SUBTRACTED TOO MUCH
         JM      ROUNDB          ;WE ARE DONE
         RAL                     ;WE AREN'T, GET OLD CARRY BACK
 IFE     LENGTH,<
-        CALL    SHFTLD>         ;ROTATE EVERYTHING LEFT ONE
+        CALL    SHFTLO>         ;ROTATE EVERYTHING LEFT ONE
 IFN     LENGTH,<
         MOV     A,E             ;ROTATE EVERYTHING LEFT ONE
         RAL                     ;ROTATE NEXT BIT OF QUOTIENT IN
@@ -6364,14 +6364,14 @@ IFN     LENGTH,<
         JNZ     FDIV1           ;THIS ISN'T THE CASE
         PUSH    H               ;SAVE PART OF NUMBER
         LXI     H,FAC           ;GET POINTER TO FAC
-        OCR     M               ;DECREMENT EXPONENT
+        DCR     M               ;DECREMENT EXPONENT
         POP     H               ;GET NUMBER BACK
         JNZ     FDIV1           ;DIVIDE MORE IF NO OVERFLOW OCCURED
         JMP     OVERR           ;OVERFLOW!!
         ;CHECK SPECIAL CASES AND ADD EXPONENTS FOR FMULT, FDIV
         ;ALTERS A,B,H,L
 IFE     LENGTH-2,<
-MULDVS: A       377             ;ENTRY FROM DDIV, SUBTRACT EXPONENTS
+MULDVS: MVI     A,377           ;ENTRY FROM DDIV, SUBTRACT EXPONENTS
         XWD     1000,056        ;"MVI   L" AROUND NEXT BYTE
 MULDVA: XRA     A               ;ENTRY FROM DMULT, ADD EXPONENTS
         LXI     H,ARG-1         ;GET POINTER TO SIGN AND HO OF ARG
@@ -6428,7 +6428,7 @@ MUL10:  CALL    MOVRF           ;GET NUMBER IN REGISTERS
         JC      OVERR           ;OVERFLOW!!
         MOV     B,A             ;RESTORE EXPONENT
         CALL    FADD            ;ADD IN ORIGINAL NUMBER TO GET 5 TIMES IT
-        LCI     H,FAC           ;ADD 1 TO EXPONENT TO MULTIPLY NUMBER BY
+        LXI     H,FAC           ;ADD 1 TO EXPONENT TO MULTIPLY NUMBER BY
         INR     M               ; 2 TO GET 10 TIMES ORIGINAL NUMBER
         RNZ                     ;ALL DONE IF NO OVERFLOW
         JMP     OVERR           ;OVERFLOW
@@ -6460,7 +6460,7 @@ SGN:    FSIGN>                  ;GET SIGN OF FAC IN A
                                 ;FALL INTO FLOAT
         ;FLOAT THE SIGNED INTEGER IN A
         ;ALTERS A,B,C,D,E,H,L
-FLOAT:  MVI     0,210           ;SET EXPONENT CORRECTLY
+FLOAT:  MVI     B,210           ;SET EXPONENT CORRECTLY
         LXI     D,$CODE         ;ZERO D,E
                                 ;FALL INTO FLOATR
         ;FLOAT THE SIGNED NUMBER IN B,A,D,E
@@ -6591,7 +6591,7 @@ MOVE1:  LDAX    D               ;GET WORD ENTRY FROM VMOVMF
 UNPACK: LXI     H,FAC-1         ;POINT TO HO AND SIGN
         MOV     A,H             ;GET HO AND SIGN
         PUSH    PSW             ;SAVE SIGN
-        ORA     200             ;RESTORE THE HIDDEN ONE
+        ORI     200             ;RESTORE THE HIDDEN ONE
         MOV     M,A             ;SAVE HO
         POP     PSW             ;GET SIGN
         XRA     M               ;GET COMPLEMENT OF SIGN IN MSB
@@ -6832,7 +6832,7 @@ CONDS:  LXI     H,$CODE         ;ZERO H,L
         SHLD    DFACLO          ;CLEAR THE FOUR LOWER BYTES IN THE DOUBLE
         SHLD    DFACLO+2        ; PRECISION NUMBER
         MVI     A,10            ;SET VALTYP TO "DOUBLE PRECISION"
-        JMP     CONISD          ;GO FOR IT
+        JMP     CONISD>         ;GO FOR IT
 PAGE
 SUBTTL  GREATEST INTEGER FUNCTION
         ;QUICK GREATEST INTEGER FUNCTION
@@ -7076,7 +7076,7 @@ IMLDIV: MOV     A,H             ;ENTRY FROM IDIV, IS RESULT .GE. 32768?
         POP     D               ;RESULT IS OK, GET SECOND ARGUMENT OFF STACK
         MOV     A,B             ;GET THE SIGN OF RESULT IN A
         JMP     INEGA           ;NEGATE THE RESULT IF NECESSARY
-IMULT3: XRA     200             ;IS RESULT 32768?
+IMULT3: XRI     200             ;IS RESULT 32768?
         ORA     L               ;NOTE: IF WE GET HERE FROM IDIV, THE RESULT
         JZ      IMULT4          ; MUST BE 32768, IT CANNOT BE GREATER
         XCHG                    ;IT IS .GT. 32768, WE HAVE OVERFLOW
@@ -7346,7 +7346,7 @@ DROUNB: ORA     A               ;ENTRY FROM DDIV
 
         ;SUBROUTINE FOR ROUND: ADD ONE TO FAC
 DROUNA: LXI     H,DFACLO        ;GET POINTER TO LO, ENTRY FROM DINT
-        MXI     B,7             ;SET UP A COUNT
+        MVI     B,7             ;SET UP A COUNT
 DRONA1: INR     M               ;INCREMENT A BYTE
         RNZ                     ;RETURN IF THERE WAS NO CARRY
         INX     H               ;INCREMENT POINTER TO NEXT HIGHER ORDER
@@ -7371,7 +7371,7 @@ DADDA:  LXI     H,ARGLO         ;GET POINTER TO ARG, ENTRY FROM DADD
 DADDFO: LXI     D,DFACLO        ;GET POINTER TO FAC, ENTRY FROM FOUT
 DADDS:  MVI     C,7             ;SET UP A COUNT
         STA     DADDOP          ;STORE THE ADD OR SUBTRACT INSTRUCTION
-        XRA     S               ;CLEAR CARRY
+        XRA     A               ;CLEAR CARRY
 DADDL:  LDAX    D               ;GET A BYTE FROM RESULT NUMBER
 DADDOP: NOP                     ;THIS IS EITHER "ADC    ," OR "SBB      M"
         STAX    D               ;SAVE THE CHANGED BYTE
@@ -7397,7 +7397,7 @@ DNEGR1: MOV     A,C             ;GET A ZERO
         MOV     M,A             ;UPDATE FAC
         INX     H               ;INCREMENT POINTER TO NEXT HIGHER ORDER BYTE
         DCR     B               ;ARE WE DONE?
-        JNX     DNEGR1          ;NO, NEGATE THE NEXT BYTE
+        JNZ     DNEGR1          ;NO, NEGATE THE NEXT BYTE
         RET                     ;ALL DONE
 
 
@@ -7413,7 +7413,7 @@ DSHFRM: LXI     H,FAC-1         ;ENTRY FROM DMULT, GET POINTER TO HO
         MVI     D,10            ;SET UP A COUNT
 DSHFR2: MOV     C,M             ;SAVE A BYTE OF FAC
         MOV     M,E             ;PUT THE LAST BYTE IN ITS PLACE
-        MOC     E,C             ;SET UP E FOR NEXT TIME THROUGH THE LOOP
+        MOV     E,C             ;SET UP E FOR NEXT TIME THROUGH THE LOOP
         DCX     H               ;POINT TO NEXT LOWER ORDER BYTE
         DCR     D               ;ARE WE DONE?
         JNZ     DSHFR2          ;NO, DO THE NEXT BYTE
@@ -7507,7 +7507,7 @@ DDIV:   FSIGN                   ;CHECK FOR DIVISION BY ZERO
         CALL    DMULDV          ;ZERO FAC AND PUT FAC IN FBUFFR
         LXI     H,ARG           ;GET POINTE RTO THE EXTRA HO BYTE WE WILL USE
         MOV     M,C             ;ZERO IT
-        MXI     B,0             ;ZERO FLAG TO SEE WHEN WE START DIVIDING
+        MVI     B,0             ;ZERO FLAG TO SEE WHEN WE START DIVIDING
 DDIV1:  XWD     1000,076        ;"MVI   A", SUBTRACT FBUFFR FROM ARG
         SBB     M               ;GET SUBTRACT INSTRUCTION
         CALL    DADDD           ;DO THE SUBTRACTION
@@ -8982,7 +8982,7 @@ POLY1:  PUSH    PSW             ;SAVE DEGREE
         JMP     FMULTT>         ;MULTIPLY BY X AND WE ARE DONE
 IFN     EXTFNC,<
         LXI     H,SINCON        ;CALCUALTE THE SIN BY EVALUATING
-        JMP     POLYX           ; THE APPROXIMATION POLYNOMIAL
+        JMP     POLYX>          ; THE APPROXIMATION POLYNOMIAL
         ;CONSTANTS FOR SIN, COS
 IFN     EXTFNC,<
 PI2:    333     ; PI/2
@@ -9189,7 +9189,7 @@ TTYW:   LXI     H,TTYWID
         JC      TTYW
         STA     LINPT1##        ;DECLARE LINPT1 EXTERNAL
 IFN     LENGTH,<
-        STA     LINPT2##
+        STA     LINPT2##>
 IFN     STRING,<
         STA     LINPT3##>
 MORCPS: SUI     14
