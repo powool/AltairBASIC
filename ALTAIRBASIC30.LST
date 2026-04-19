@@ -115,10 +115,10 @@ C        6-SEP-64 03:11         COMMON FILE
     42                                  04200   DEFINE  SYNCHK(A),<RST  1
     43                                  04300                   A>
     44                                  04400   DEFINE  CHRGET,<RST     2>
-    45                                  04500   DEFINE  OUTCHR,<RST     3
-    46                                  04600   DEFINE  COMPAR,<RST     4
-    47                                  04700   DEFINE  FSIGN,<RST      5
-    48                                  04800   DEFINE  PUSHM,<RST      6
+    45                                  04500   DEFINE  OUTCHR,<RST     3>
+    46                                  04600   DEFINE  COMPAR,<RST     4>
+    47                                  04700   DEFINE  FSIGN,<RST      5>
+    48                                  04800   DEFINE  PUSHM,<RST      6>
     49                                  04900   DEFINE  PUSHFM,<PUSHM
     50                                  05000                   PUSHM>
     51                                  05100   DEFINE  ACLRF,<
@@ -242,7 +242,7 @@ F3      MAC      6-SEP-64 03:11         VERSION 3.0 -- MORE FEATURES TO GO
    114                  000110          00700   LINLEN==72                      ;TELETYPE LINE LENGTH
    115                  000110          00720   BUFLEN==72                      ;INPUT BUFFER SIZE
    116                  000004          00740   STRSIZ==4
-   117                  000003          00760   IFE     LENGTH-2<STRSIZ==3>
+   117                  000003          00760   IFE     LENGTH-2,<STRSIZ==3>
    118                  000003          00780   NUMTMP==3                       ;NUMBER OF STRING TEMPORARIES
    119                  000005          00800   IFE     LENGTH-2,<NUMTMP=5>
    120                  000015          00820   CR==13
@@ -1415,7 +1415,7 @@ F3      MAC      6-SEP-64 03:11         DISPATCH TABLES,RESERVED WORDS, ERROR TE
    949  000156' 000000  000153'
    950  000157' 000000  010631'         16480           ADR(RIGHT$)
    951  000160' 000000  000155'
-   952  000161' 000000  010643'         16500           ADR(MIDS$)>
+   952  000161' 000000  010643'         16500           ADR(MID$)>
    953  000162' 000000  000157'
    954
    955                                  16540   DEFINE ADRP(X),<ADR(X)>
@@ -1816,7 +1816,7 @@ F3      MAC      6-SEP-64 03:11         DISPATCH TABLES,RESERVED WORDS, ERROR TE
   1266  001027' 000000  000000
   1267                  000004          21820           ERROD==Q"
   1268                                  21840           DCE"FC"
-  1269  001030' 000000  000111          21860           "DCL"ILLEGAL FUNCTION CALL"
+  1269  001030' 000000  000111          21860           DCL"ILLEGAL FUNCTION CALL"
   1270  001031' 000000  000114
   1271  001032' 000000  000114
   1272  001033' 000000  000105
@@ -2362,7 +2362,7 @@ F3      MAC      6-SEP-64 03:11         LOW SEGMENT -- RAM -- IE THIS STUFF IS N
   1687  001644'                         25030           BLOCK   1               ;[TEMPORARY LEAST SIGNIFICANT BYTE]
   1688  001645'                         25040   ARGLO:  BLOCK   7               ;[LOCATION OF SECOND ARGUMENT FOR DOUBLE
   1689  001654'                         25060   ARG:    BLOCK   1>              ; PRECISION]
-  1690  001655'                         25080   FBUFFR  BLOCK   13              ;BUFFER FOR FOUT
+  1690  001655'                         25080   FBUFFR: BLOCK   13              ;BUFFER FOR FOUT
   1691  001672'                         25100   IFE     LENGTH-2,<BLOCK 35-13>
   1692                                  25120   PAGE
 
@@ -2724,9 +2724,9 @@ F3      MAC      6-SEP-64 03:11         ERROR HANDLER, READY, COMPACTIFICATION, 
   1903  002124' 001000  000302          28300           JNZ     LEPSKP>         ;SKIP SOME MORE
   1904  002125' 000000  002117'
   1905  002126' 000000  002120'
-  1906                                  28320   IFN     LENGTH-2<
+  1906                                  28320   IFN     LENGTH-2,<
   1907                                  28322           MOV     D,A             ;GET ZERO INTO D
-  1908                                  28324           MVI     A,"7"           ;START OF ERROR MESSAGE
+  1908                                  28324           MVI     A,"?"           ;START OF ERROR MESSAGE
   1909                                  28326           OUTCHR                  ;TYPE IT
   1910                                  28340           DAD     D               ;ADD IN ERROR CODE
   1911                                  28360           MOV     A,M             ;GET FIRST ERROR CHARACTER
@@ -3042,7 +3042,7 @@ F3      MAC      6-SEP-64 03:11         ERROR HANDLER, READY, COMPACTIFICATION, 
   2151  002374' 001000  000104          31700   LOOP:   MOV     B,H             ;IF EXITING BECAUSE OF END OF PROGRAM,
   2152                                  31720                                   ;SET [B,C] TO POINT TO DOUBLE ZEROES.
   2153  002375' 001000  000115          31740           MOV     C,L
-  2154  002376' 001000  000176          31760           MOD     A,M             ;GET WORD POINTER TO
+  2154  002376' 001000  000176          31760           MOV     A,M             ;GET WORD POINTER TO
   2155  002377' 001000  000043          31780           INX     H               ;BUMP POINTER
   2156  002400' 001000  000266          31800           ORA     M               ;GET 2ND BYTE
   2157  002401' 001000  000053          31820           DCX     H               ;GO BACK
@@ -3515,7 +3515,7 @@ F3      MAC      6-SEP-64 03:11         ERROR HANDLER, READY, COMPACTIFICATION, 
   2526  003053' 000000  003061'
   2527  003054' 000000  003042'
   2528  003055' 001000  000171          36500           MOV     A,C
-  2529  003056' 001000  000161          36520           MOV     M,C             STORE THIS CHARACTER
+  2529  003056' 001000  000161          36520           MOV     M,C             ;STORE THIS CHARACTER
   2530  003057' 001000  000043          36540           INX     H
   2531  003060' 001000  000004          36560           INR     B
   2532  003061'                         36580   OUTBEL:
@@ -4074,7 +4074,7 @@ F3      MAC      6-SEP-64 03:11         NEW STATEMENT FETCHER
   2893  003333' 001000  000312          42240           JZ      ENDCON          ;RAN OFF THE END -- OK
   2894  003334' 000000  003501'
   2895  003335' 000000  003324'
-  2896  003336' 001000  000136          42260           MOVE    E,M
+  2896  003336' 001000  000136          42260           MOV     E,M
   2897  003337' 001000  000043          42280           INX     H
   2898  003340' 001000  000126          42300           MOV     D,M             ;GET LINE # IN [D,E]
 
@@ -4293,7 +4293,7 @@ BASIC MCS 8080  GATES/ALLEN/DAVIDOFF    MACRO 47(113) 03:12 10-SEP-75 PAGE 12-1
 F3      MAC      6-SEP-64 03:11         RESTORE,STOP,END,LINGET,CHRCON
 
   3035  003520' 000000  003514'
-  3036  003521' 001000  000042          44160           OLDTXT                  ;SAVE IT
+  3036  003521' 001000  000042          44160           SHLD    OLDTXT          ;SAVE IT
   3037  003522' 000000  001613'
   3038  003523' 000000  003517'
   3039  003524'                         44180   DIRIS:
@@ -5211,7 +5211,7 @@ F3      MAC      6-SEP-64 03:11         IF ... THEN CODE
   3660  004344' 000000  000245
   3661  004345' 001000  000053          53260           DCX     H
   3662                                  53280   OKGOTO:
-  3663                                  53300   IFE:    LENGTH,<
+  3663                                  53300   IFE     LENGTH,<
   3664                                  53320           POP     PSW
   3665                                  53340           POPR                    ;POP OFF NUMBER
   3666                                  53360   IFN     STRING,<
@@ -6065,7 +6065,7 @@ F3      MAC      6-SEP-64 03:11         INPUT AND READ CODE
   4282  005167' 000000  000304
   4283  005160' 000000  000015          61200           ACRLF
   4284  005161' 000000  000012
-  4285  005162' 000000  000000          61220           O>
+  4285  005162' 000000  000000          61220           0>
   4286                                  61240   ;
   4287                                  61260   ; SUBROUTINE TO FIND DATA
   4288                                  61280   ; IN THE 4K "DATA" MUST BE AT THE START OF THE LINE
@@ -6189,7 +6189,7 @@ F3      MAC      6-SEP-64 03:11         NEXT CODE
   4359                                  62420   ; TOTAL 16 BYTES
   4360                                  62440   ;
   4361  005225'                         62460   NEXT:
-  4362  005225' 001000  000021          62480   IFN     LENGTH,<LXI     0,$CODE>;FOR THE "NEXT"
+  4362  005225' 001000  000021          62480   IFN     LENGTH,<LXI     D,$CODE>;FOR THE "NEXT"
   4363  005226' 000000  000000'
   4364  005227' 000000  005223'
   4365                                  62500                                   ;STATEMENT WITHOUT ANY ARGS
@@ -7010,7 +7010,7 @@ F3      MAC      6-SEP-64 03:11         FORMULA EVALUATION CODE
   4929  005777' 000000  005731*
   4930  006000' 000000  005757'
   4931  006001' 001000  000361          06140           POP     PSW             ;POP THE STACK VALUE TYPE INTO [A]
-  4932  006002' 001000  000062          06160           STA     VALTYP          PUT IT IN VALTYP FOR THE FORCE
+  4932  006002' 001000  000062          06160           STA     VALTYP          ;PUT IT IN VALTYP FOR THE FORCE
   4933  006003' 000000  001543'
   4934  006004' 000000  005777'
   4935                                  06180                                   ;ROUTINE
@@ -8144,7 +8144,7 @@ F3      MAC      6-SEP-64 03:11         DIMENSION & VARIABLE SEARCHING
   5791                                  18680           COMPAR                  ;SEE IF WE ARE THERE
   5792                                  18700           XCHG                    ;[H,L] GETS SEARCH POINT
   5793                                  18720           POP     D               ;POP OFF VARIABLE LOOKS
-  5794                                  18740           JZ      NOTFDO          ;COULDN'T FIND IT
+  5794                                  18740           JZ      NOTFDD          ;COULDN'T FIND IT
   5795                                  18760           PUSHM                   ;PUT ON LOOKS OF VARIABLE
   5796                                  18780                                   ;WE ARE EXAMINING
   5797                                  18800           XTHL                    ;PUT [H,L] ON THE STACK AND
@@ -8247,7 +8247,7 @@ F3      MAC      6-SEP-64 03:11         MULTIPLE DIMENSION CODE
 
   5860                                  20060   SUBTTL  MULTIPLE DIMENSION CODE
   5861
-  5862                                  20100   IFN     MULDIM,
+  5862                                  20100   IFN     MULDIM,<
   5863                                  20120   ;
   5864                                  20140   ; FORMAT OF ARRAYS IN CORE
   5865                                  20160   ;
@@ -8849,7 +8849,7 @@ BASIC MCS 8080  GATES/ALLEN/DAVIDOFF    MACRO 47(113) 03:12 10-SEP-75 PAGE 25
 F3      MAC      6-SEP-64 03:11         SIMPLE-USER-DEFINED-FUNCTION CODE
 
   6288                                  26380   SUBTTL  SIMPLE-USER-DEFINED-FUNCTION CODE
-  6289                                  26390   IFN     FUNCTS,
+  6289                                  26390   IFN     FUNCTS,<
   6290                                  26400   ;
   6291                                  26420   ; NOTE ONLY SINGLE ARGUMENTS ARE ALLOWED TO FUNCTIONS
   6292                                  26440   ; AND FUNCTIONS MUST BE OF THE SINGLE LINE FORM:
@@ -9228,7 +9228,7 @@ F3      MAC      6-SEP-64 03:11         STRING FUNCTIONS
   6547  007656' 001000  000312          29940           JZ      STRFIN
   6548  007657' 000000  007665'
   6549  007660' 000000  007653'
-  6550  007661' 001000  000270          29960           CMP     0               ;CLOSING QUOTE
+  6550  007661' 001000  000270          29960           CMP     B               ;CLOSING QUOTE
   6551  007662' 001000  000302          29980           JNZ     STRGET          ;NO, GO BACK FOR MORE
   6552  007663' 000000  007646'
   6553  007664' 000000  007657'
@@ -10065,7 +10065,7 @@ F3      MAC      6-SEP-64 03:11         STRING FUNCTIONS
   7202  010656' 000000  010665'
   7203  010657' 000000  010646'
   7204                                  39100                                   ;IF ONE ARGUMENT THIS IS CORRECT
-  7205  010660' 001000  000317          39120           SYNCHK  442             ;COMMA? MUST DELINEATE 3RD ARG.
+  7205  010660' 001000  000317          39120           SYNCHK  44              ;COMMA? MUST DELINEATE 3RD ARG.
   7206  010661' 000000  000054
   7207  010662' 001000  000315          39140           CALL    GETBYT          ;GET ARGUMENT  IN  [E]
   7208  010663' 000000  011020'
@@ -10084,7 +10084,7 @@ F3      MAC      6-SEP-64 03:11         STRING FUNCTIONS
   7221  010700' 000000  000000
   7222  010701' 001000  000320          39320           RNC                     ;YES, JUST USE NULL STR
   7223  010702' 001000  000117          39340           MOV     C,A             ;SAVE OFFSET OF CHARACTER POINTER
-  7224  010703' 001000  000176          39360           MOC     A,M             ;GET PRESENT LEN OF STR
+  7224  010703' 001000  000176          39360           MOV     A,M             ;GET PRESENT LEN OF STR
   7225  010704' 001000  000221          39380           SUB     C               ;SUBTRACT INDEX (2ND ARG)
   7226  010705' 001000  000273          39400           CMP     E               ;IS IT TRUNCATION
   7227  010706' 001000  000107          39420           MOV     B,A             ;GET CALCED LENGTH IN B
@@ -10225,7 +10225,7 @@ F3      MAC      6-SEP-64 03:11         STRING FUNCTIONS
   7334  011024' 001000  000315          40860           CALL    FRCINT
   7335  011025' 000000  006441*
   7336  011026' 000000  011021'
-  7337  011027' 001000  000353          40880           ZCHG
+  7337  011027' 001000  000353          40880           XCHG
   7338  011030' 001000  000341          40900           POP     H>
   7339                                  40920   IFN     LENGTH-2,<
   7340                                  40940   GETBYT: CALL    FRMNUM          ;READ FORMULA INTO THE FAC.
@@ -13700,7 +13700,7 @@ F4      MAC     23-AUG-64 06:08         FLOATING POINT ADDITION AND SUBTRACTION
    308  000136' 001000  000127          03880           MOV     D,A
    309  000137' 001000  000043          03900           INX     H               ;UPDATE POINTER TO HIGH ORDERS
    310  000140' 001000  000176          03920           MOV     A,M             ;SUBTRACT HIGH ORDERS
-   311  000141' 001000  000231          03940           ABB     C
+   311  000141' 001000  000231          03940           SBB     C
    312  000142' 001000  000117          03960           MOV     C,A
    313                                  03980           ;BECAUSE WE WANT A POSITIVE MANTISSA, CHECK IF WE HAVE TO NEGATE THE
    314                                  04000           ; NUMBER
@@ -13814,7 +13814,7 @@ F4      MAC     23-AUG-64 06:08         FLOATING POINT ADDITION AND SUBTRACTION
    394  000217' 001000  000312          05360           JZ      ROUND>
    395  000220' 000000  000233'
    396  000221' 000000  000211'
-   397  000222' 001000  000041          05380           LXI     H,FAC           LOOK AT FAC'S EXPONENT
+   397  000222' 001000  000041          05380           LXI     H,FAC           ;LOOK AT FAC'S EXPONENT
    398  000223' 000000  000175*
    399  000224' 000000  000220'
    400  000225' 001000  000206          05400           ADD     M               ;UPDATE EXPONENT
@@ -13946,7 +13946,7 @@ F4      MAC     23-AUG-64 06:08         FLOATING POINT ADDITION AND SUBTRACTION
    498  000321' 001000  000107          07060           MOV     B,A             ;SAVE IT
    499  000322' 001000  000175          07080           MOV     A,L             ;GET A ZERO
    500  000323' 001000  000233          07100           SBB     E               ;NEGATE NEXT HIGHEST ORDER
-   501  000324' 001000  000137          07120           MOV     E,A             LSAVE IT
+   501  000324' 001000  000137          07120           MOV     E,A             ;SAVE IT
    502  000325' 001000  000175          07140           MOV     A,L             ;GET A ZERO
    503  000326' 001000  000232          07160           SBB     D               ;NEGATE NEXT HIGHEST ORDER
    504  000327' 001000  000127          07180           MOV     D,A             ;SAVE IT
@@ -14510,7 +14510,7 @@ F4      MAC     23-AUG-64 06:08         FLOATING MULTIPLICATION AND DIVISION
    910  000765' 000000  000747'
    911  000766' 001000  000027          13180           RAL                     ;WE AREN'T, GET OLD CARRY BACK
    912                                  13200   IFE     LENGTH,<
-   913                                  13220           CALL    SHFTLD>         ;ROTATE EVERYTHING LEFT ONE
+   913                                  13220           CALL    SHFTLO>         ;ROTATE EVERYTHING LEFT ONE
    914                                  13240   IFN     LENGTH,<
    915  000767' 001000  000173          13260           MOV     A,E             ;ROTATE EVERYTHING LEFT ONE
    916  000770' 001000  000027          13280           RAL                     ;ROTATE NEXT BIT OF QUOTIENT IN
@@ -14556,7 +14556,7 @@ F4      MAC     23-AUG-64 06:08         FLOATING MULTIPLICATION AND DIVISION
    942  001022' 001000  000041          13680           LXI     H,FAC           ;GET POINTER TO FAC
    943  001023' 000000  000426*
    944  001024' 000000  001017'
-   945  001025' 001000  000065          13720           OCR     M               ;DECREMENT EXPONENT
+   945  001025' 001000  000065          13720           DCR     M               ;DECREMENT EXPONENT
    946  001026' 001000  000341          13740           POP     H               ;GET NUMBER BACK
    947  001027' 001000  000302          13760           JNZ     FDIV1           ;DIVIDE MORE IF NO OVERFLOW OCCURED
    948  001030' 000000  000720'
@@ -14569,7 +14569,7 @@ F4      MAC     23-AUG-64 06:08         FLOATING MULTIPLICATION AND DIVISION
    955                                  13820           ;CHECK SPECIAL CASES AND ADD EXPONENTS FOR FMULT, FDIV
    956                                  13840           ;ALTERS A,B,H,L
    957                                  13860   IFE     LENGTH-2,<
-   958                                  13880   MULDVS: A       377             ;ENTRY FROM DDIV, SUBTRACT EXPONENTS
+   958                                  13880   MULDVS: MVI     A,377           ;ENTRY FROM DDIV, SUBTRACT EXPONENTS
    959                                  13900           XWD     1000,056        ;"MVI   L" AROUND NEXT BYTE
    960                                  13920   MULDVA: XRA     A               ;ENTRY FROM DMULT, ADD EXPONENTS
    961                                  13940           LXI     H,ARG-1         ;GET POINTER TO SIGN AND HO OF ARG
@@ -14680,7 +14680,7 @@ F4      MAC     23-AUG-64 06:08         FLOATING MULTIPLICATION AND DIVISION
   1038  001122' 001000  000315          15080           CALL    FADD            ;ADD IN ORIGINAL NUMBER TO GET 5 TIMES IT
   1039  001123' 000000  000025'
   1040  001124' 000000  001117'
-  1041  001125' 001000  000041          15100           LCI     H,FAC           ;ADD 1 TO EXPONENT TO MULTIPLY NUMBER BY
+  1041  001125' 001000  000041          15100           LXI     H,FAC           ;ADD 1 TO EXPONENT TO MULTIPLY NUMBER BY
   1042  001126' 000000  001044*
   1043  001127' 000000  001123'
   1044  001130' 001000  000064          15120           INR     M               ; 2 TO GET 10 TIMES ORIGINAL NUMBER
@@ -14777,7 +14777,7 @@ F4      MAC     23-AUG-64 06:08         SIGN, SGN, FLOAT, NEG AND ABS
   1080
   1081                                  15780           ;FLOAT THE SIGNED INTEGER IN A
   1082                                  15800           ;ALTERS A,B,C,D,E,H,L
-  1083  001150' 001000  000006          15820   FLOAT:  MVI     0,210           ;SET EXPONENT CORRECTLY
+  1083  001150' 001000  000006          15820   FLOAT:  MVI     B,210           ;SET EXPONENT CORRECTLY
   1084  001151' 000000  000210
   1085  001152' 001000  000021          15840           LXI     D,$CODE         ;ZERO D,E
   1086  001153' 000000  000601*
@@ -15061,7 +15061,7 @@ F4      MAC     23-AUG-64 06:08         FLOATING POINT MOVEMENT ROUTINES
   1264  001274' 000000  001267'
   1265  001275' 001000  000176          18840           MOV     A,H             ;GET HO AND SIGN
   1266  001276' 001000  000365          18860           PUSH    PSW             ;SAVE SIGN
-  1267  001277' 001000  000366          18880           ORA     200             ;RESTORE THE HIDDEN ONE
+  1267  001277' 001000  000366          18880           ORI     200             ;RESTORE THE HIDDEN ONE
   1268  001300' 000000  000200
   1269  001301' 001000  000167          18900           MOV     M,A             ;SAVE HO
   1270  001302' 001000  000361          18920           POP     PSW             ;GET SIGN
@@ -15517,7 +15517,7 @@ F4      MAC     23-AUG-64 06:08         CONVERSION ROUTINES BETWEEN INTEGER, SIN
   1519                                  23720           SHLD    DFACLO          ;CLEAR THE FOUR LOWER BYTES IN THE DOUBLE
   1520                                  23740           SHLD    DFACLO+2        ; PRECISION NUMBER
   1521                                  23760           MVI     A,10            ;SET VALTYP TO "DOUBLE PRECISION"
-  1522                                  23780           JMP     CONISD          ;GO FOR IT
+  1522                                  23780           JMP     CONISD>         ;GO FOR IT
   1523                                  23800   PAGE
 
 
@@ -15966,7 +15966,7 @@ F4      MAC     23-AUG-64 06:08         INTEGER ARITHMETIC ROUTINES
   1806                                  28760           POP     D               ;RESULT IS OK, GET SECOND ARGUMENT OFF STACK
   1807                                  28780           MOV     A,B             ;GET THE SIGN OF RESULT IN A
   1808                                  28800           JMP     INEGA           ;NEGATE THE RESULT IF NECESSARY
-  1809                                  28820   IMULT3: XRA     200             ;IS RESULT 32768?
+  1809                                  28820   IMULT3: XRI     200             ;IS RESULT 32768?
   1810                                  28840           ORA     L               ;NOTE: IF WE GET HERE FROM IDIV, THE RESULT
   1811                                  28860           JZ      IMULT4          ; MUST BE 32768, IT CANNOT BE GREATER
   1812                                  28880           XCHG                    ;IT IS .GT. 32768, WE HAVE OVERFLOW
@@ -16321,7 +16321,7 @@ F4      MAC     23-AUG-64 06:08         DOUBLE PRECISION ARITHMETIC ROUTINES
   2077                                  34160
   2078                                  34180           ;SUBROUTINE FOR ROUND: ADD ONE TO FAC
   2079                                  34200   DROUNA: LXI     H,DFACLO        ;GET POINTER TO LO, ENTRY FROM DINT
-  2080                                  34220           MXI     B,7             ;SET UP A COUNT
+  2080                                  34220           MVI     B,7             ;SET UP A COUNT
   2081                                  34240   DRONA1: INR     M               ;INCREMENT A BYTE
   2082                                  34260           RNZ                     ;RETURN IF THERE WAS NO CARRY
   2083                                  34280           INX     H               ;INCREMENT POINTER TO NEXT HIGHER ORDER
@@ -16360,7 +16360,7 @@ F4      MAC     23-AUG-64 06:08         DOUBLE PRECISION ARITHMETIC ROUTINES
   2102                                  34660   DADDFO: LXI     D,DFACLO        ;GET POINTER TO FAC, ENTRY FROM FOUT
   2103                                  34680   DADDS:  MVI     C,7             ;SET UP A COUNT
   2104                                  34700           STA     DADDOP          ;STORE THE ADD OR SUBTRACT INSTRUCTION
-  2105                                  34720           XRA     S               ;CLEAR CARRY
+  2105                                  34720           XRA     A               ;CLEAR CARRY
   2106                                  34740   DADDL:  LDAX    D               ;GET A BYTE FROM RESULT NUMBER
   2107                                  34760   DADDOP: NOP                     ;THIS IS EITHER "ADC    ," OR "SBB      M"
   2108                                  34780           STAX    D               ;SAVE THE CHANGED BYTE
@@ -16386,7 +16386,7 @@ F4      MAC     23-AUG-64 06:08         DOUBLE PRECISION ARITHMETIC ROUTINES
   2128                                  35180           MOV     M,A             ;UPDATE FAC
   2129                                  35200           INX     H               ;INCREMENT POINTER TO NEXT HIGHER ORDER BYTE
   2130                                  35220           DCR     B               ;ARE WE DONE?
-  2131                                  35240           JNX     DNEGR1          ;NO, NEGATE THE NEXT BYTE
+  2131                                  35240           JNZ     DNEGR1          ;NO, NEGATE THE NEXT BYTE
   2132                                  35260           RET                     ;ALL DONE
   2133                                  35280
   2134                                  35300
@@ -16402,7 +16402,7 @@ F4      MAC     23-AUG-64 06:08         DOUBLE PRECISION ARITHMETIC ROUTINES
   2144                                  35500           MVI     D,10            ;SET UP A COUNT
   2145                                  35520   DSHFR2: MOV     C,M             ;SAVE A BYTE OF FAC
   2146                                  35540           MOV     M,E             ;PUT THE LAST BYTE IN ITS PLACE
-  2147                                  35560           MOC     E,C             ;SET UP E FOR NEXT TIME THROUGH THE LOOP
+  2147                                  35560           MOV     E,C             ;SET UP E FOR NEXT TIME THROUGH THE LOOP
   2148                                  35580           DCX     H               ;POINT TO NEXT LOWER ORDER BYTE
   2149                                  35600           DCR     D               ;ARE WE DONE?
 
@@ -16525,7 +16525,7 @@ F4      MAC     23-AUG-64 06:08         DOUBLE PRECISION ARITHMETIC ROUTINES
   2239                                  37380           CALL    DMULDV          ;ZERO FAC AND PUT FAC IN FBUFFR
   2240                                  37400           LXI     H,ARG           ;GET POINTE RTO THE EXTRA HO BYTE WE WILL USE
   2241                                  37420           MOV     M,C             ;ZERO IT
-  2242                                  37440           MXI     B,0             ;ZERO FLAG TO SEE WHEN WE START DIVIDING
+  2242                                  37440           MVI     B,0             ;ZERO FLAG TO SEE WHEN WE START DIVIDING
   2243                                  37460   DDIV1:  XWD     1000,076        ;"MVI   A", SUBTRACT FBUFFR FROM ARG
   2244                                  37480           SBB     M               ;GET SUBTRACT INSTRUCTION
   2245                                  37500           CALL    DADDD           ;DO THE SUBTRACTION
@@ -19112,7 +19112,7 @@ F4      MAC     23-AUG-64 06:08         SINE, COSINE AND TANGENT FUNCTIONS
   4070  003062' 001000  000041          67440           LXI     H,SINCON        ;CALCUALTE THE SIN BY EVALUATING
   4071  003063' 000000  003100'
   4072  003064' 000000  003060'
-  4073  003065' 001000  000303          67460           JMP     POLYX           ; THE APPROXIMATION POLYNOMIAL
+  4073  003065' 001000  000303          67460           JMP     POLYX>          ; THE APPROXIMATION POLYNOMIAL
   4074  003066' 000000  002613'
   4075  003067' 000000  003063'
   4076                                  67480           ;CONSTANTS FOR SIN, COS
@@ -19615,7 +19615,7 @@ F4      MAC     23-AUG-64 06:08         SYSTEM INITIALIZATION CODE
   4420  003557' 000000  000000*
   4421  003560' 000000  003554'
   4422                                  71700   IFN     LENGTH,<
-  4423  003561' 001000  000062          71720           STA     LINPT2##
+  4423  003561' 001000  000062          71720           STA     LINPT2##>
   4424  003562' 000000  000000*
   4425  003563' 000000  003557'
   4426                                  71740   IFN     STRING,<
