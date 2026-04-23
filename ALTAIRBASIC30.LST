@@ -103,12 +103,12 @@ C        6-SEP-64 03:11         COMMON FILE
     30                                  03000           CONTRW==0>
     31
     32                                  03200   IFE     LENGTH-1,<
-    33                                  03300           EXTFUN==1
+    33                                  03300           EXTFNC==1
     34                                  03400           MULDIM==1
     35                                  03500           STRING==1>
     36
     37                                  03700   IFE     LENGTH-2,<
-    38                  000001          03800           EXTFUN==1
+    38                  000001          03800           EXTFNC==1
     39                  000001          03900           MULDIM==1
     40                  000001          04000           STRING==1>
     41
@@ -2638,7 +2638,7 @@ F3      MAC      6-SEP-64 03:11         GENERAL STORAGE MANAGEMENT ROUTINES
   1854  002054' 001000  000353          27680           XCHG                    ;RESTORE [H,L] FROM [D,E]
   1855  002055' 001000  000321          27700           POP     D               ;GET [D,E] BACK
   1856  002056' 001000  000320          27720           RNC                     ;WAS OK?
-  1857  002057' 001000  000036          27740   OMERR:  MVI     E,EEPROM        ;"OUT OF MEMORY"
+  1857  002057' 001000  000036          27740   OMERR:  MVI     E,ERROM         ;"OUT OF MEMORY"
   1858  002060' 000000  000007
   1859                                  27760   IFE     LENGTH,<
   1860                                  27780           XWD     ^O1000,1>       ;"LXI B," OVER THE NEXT 2
@@ -4317,7 +4317,7 @@ F3      MAC      6-SEP-64 03:11         RESTORE,STOP,END,LINGET,CHRCON
   3057                                  44400           HRRZ    14,JOBDDT##
   3058                                  44420           JRST    0(14)>
   3059
-  3060                                  44460   IFN     LENFTH,<
+  3060                                  44460   IFN     LENGTH,<
   3061  003542' 001000  000300          44480   CONT:   RNZ                     ;MAKE SURE THERE IS A TERMINATOR
   3062  003543' 001000  000036          44500           MVI     E,ERRCN
   3063  003544' 000000  000021
@@ -6886,7 +6886,7 @@ F3      MAC      6-SEP-64 03:11         FORMULA EVALUATION CODE
   4833  005655' 001000  000072          04940           LDA     VALTYP          ;SEE IF THE FAC IS DOUBLE PRECISION
   4834  005656' 000000  001543'
   4835  005657' 000000  005653'
-  4836  005660' 001000  000376          04960           CPI     B               ;AND IF SO, CONVERT THE STACK OPERAND
+  4836  005660' 001000  000376          04960           CPI     8               ;AND IF SO, CONVERT THE STACK OPERAND
   4837  005661' 000000  000010
   4838  005662' 001000  000312          04980           JZ      FACDBL          ;TO DOUBLE PRECISION
   4839  005663' 000000  005775'
@@ -7401,7 +7401,7 @@ F3      MAC      6-SEP-64 03:11         FORMULA EVALUATION CODE
   5236  006307' 001000  000072          10140   GETYPE: LDA     VALTYP          ;GET THE VALTYP
   5237  006310' 000000  001543'
   5238  006311' 000000  006277'
-  5239  006312' 001000  000376          10160           CPI     B               ;SET CARRY CORRECTLY
+  5239  006312' 001000  000376          10160           CPI     8               ;SET CARRY CORRECTLY
   5240  006313' 000000  000010
   5241  006314' 001000  000075          10180           DCR     A               ;SET THE OTHER CONDITION CODE CORRECTLY
   5242  006315' 001000  000075          10200           DCR     A               ; WITHOUT AFFECTING CARRY
@@ -7418,7 +7418,7 @@ F3      MAC      6-SEP-64 03:11         FORMULA EVALUATION CODE
   5253                                  10420   IFN     STRING,<CALL    CHKNUM>
   5254                                  10440           CALL    DEINT           ;GET [D,E]=INT VALUE AND CHECK SIZE
   5255                                  10460           POP     PSW
-  5256                                  10480           XCHG                    [H,L]=INT VALUE
+  5256                                  10480           XCHG                    ;[H,L]=INT VALUE
   5257                                  10500           POP     0               ;GET HIGH ORDER OFF
   5258                                  10520           XTHL                    ;PUT INT VALUE ON
   5259                                  10540                                   ;GET LOW OF SECOND ARG OFF
@@ -7534,7 +7534,7 @@ F3      MAC      6-SEP-64 03:11         FORMULA EVALUATION CODE
   5341                                  12180           POP     H               ;GET 2ND CHARACTER POINTER IN H
   5342                                  12200           XTHL                    ;GET 2ND CHARACTER COUNTER IN L
   5343                                  12220           MOV     D,L>            ;SAVE IN D
-  5344                                  12240   IFN     LENGTH-2,<
+  5344                                  12240   IFE     LENGTH-2,<
   5345  006320' 001000  000315          12260   STRCMP: CALL    FRESTR          ;FREE UP THE FAC STRING, AND GET THE
   5346  006321' 000000  010431'
   5347  006322' 000000  006310'
@@ -7871,7 +7871,7 @@ F3      MAC      6-SEP-64 03:11         DIMENSION & VARIABLE SEARCHING
   5574  006550' 000000  006574'
   5575  006551' 000000  006545'
   5576  006552' 001000  000325          15220           PUSH    D
-  5577  006553' 001000  000026          15240           MVI     D,B             ;ASSUME ITS DOUBLE PRECISION
+  5577  006553' 001000  000026          15240           MVI     D,8             ;ASSUME ITS DOUBLE PRECISION
   5578  006554' 000000  000010
   5579  006555' 001000  000376          15260           CPI     "#"             ;CHECK THE CHARACTER
   5580  006556' 000000  000043
@@ -8332,7 +8332,7 @@ F3      MAC      6-SEP-64 03:11         MULTIPLE DIMENSION CODE
   5930  007024' 001000  000072          21100           LDA     VALTYP>
   5931  007025' 000000  001543'
   5932  007026' 000000  007020'
-  5933  007027' 001000  000312          21120           JZ      NOTFDO          ;YES,COULDN'T FIND THIS ARRAY
+  5933  007027' 001000  000312          21120           JZ      NOTFDD          ;YES,COULDN'T FIND THIS ARRAY
   5934  007030' 000000  007104'
   5935  007031' 000000  007025'
   5936                                  21140   IFE     LENGTH-2,<
@@ -8428,7 +8428,7 @@ F3      MAC      6-SEP-64 03:11         MULTIPLE DIMENSION CODE
   6012                                  22360   ;       OTHERWISE INDEX INTO THE VARIABLE AS IF IT
   6013                                  22380   ;       WERE FOUND ON THE INITIAL SEARCH
   6014                                  22400   ;
-  6015  007104'                         22420   NOTFOD:
+  6015  007104'                         22420   NOTFDD:
   6016                                  22440   IFE     LENGTH-2,<
   6017  007104' 010000  000167          22460           MOV     M,A             ;PUT DOWN THE VARIABLE TYPE
   6018  007105' 010000  000043          22480           INX     H
@@ -16395,7 +16395,7 @@ F4      MAC     23-AUG-64 06:08         DOUBLE PRECISION ARITHMETIC ROUTINES
   2137                                  35360           ;ALTERS A,C,D,E,H,L
   2138                                  35380   DSHFTR: LXI     H,DFACLO-1      ;GET POINTER TO LO
   2139                                  35400           MVI     M,0             ;PUT ZERO IN EXTRA LO ORDER BYTE
-  2140                                  35420   DSHFT1: SUI     10              ;SEE IF WE CAN SHIFT 8 RIGHT
+  2140                                  35420   DSHFR1: SUI     10              ;SEE IF WE CAN SHIFT 8 RIGHT
   2141                                  35440           JC      DSHFR3          ;WE CAN'T, CHECK IF WE ARE DONE
   2142                                  35460   DSHFRM: LXI     H,FAC-1         ;ENTRY FROM DMULT, GET POINTER TO HO
   2143                                  35480           MVI     E,0             ;SHIFT A ZERO INTO THE HO
@@ -17671,7 +17671,7 @@ F4      MAC     23-AUG-64 06:08         FLOATING POINT OUTPUT ROUTINE
   3060                                  50660           JC      FOUTFX          ;THE MAN WANTS FIXED FORMATTED OUTPUT
   3061                                  50680           ;HERE TO PRINT NUMBERS IN FREE FORMAT
   3062                                  50700           POP     B               ;WE CAN IGNORE THE OLD B AND C
-  3063                                  50720           MVI     "0"             ;PUT A ZERO IN THE BUFFER IN CASE THE NUMBER
+  3063                                  50720           MVI     M,"0"           ;PUT A ZERO IN THE BUFFER IN CASE THE NUMBER
   3064                                  50740           JZ      FOUTZR          ; IS ZERO.  IT IS, FINISH IT UP
   3065                                  50760           CPI     4               ;DECIDE WHAT KIND OF A VALUE WE HAVE
   3066                                  50780           JNC     FOUFRV          ;WE HAVE A SNG OR DBL
@@ -17789,7 +17789,7 @@ F4      MAC     23-AUG-64 06:08         FLOATING POINT OUTPUT ROUTINE
   3150                                  52460           MOV     A,M             ;GET IT AND SEE IF IT WAS ZERO
   3151                                  52480           CPI     "0"
   3152                                  52500           JZ      FOFRS2          ;IT WAS, CONTINUE SUPPRESSING
-  3153                                  52520           COU     "."             ;HAVE WE SUPPRESSED ALL THE FRACTIONAL DIGITS?
+  3153                                  52520           CPI     "."             ;HAVE WE SUPPRESSED ALL THE FRACTIONAL DIGITS?
   3154                                  52540           CNZ     INXHRT          ;YES, IGNORE THE DECIMAL POINT ALSO
   3155                                  52560           POP     PSW             ;GET THE EXPONENT BACK
   3156                                  52580           JZ      FOUTON          ;WE ARE DONE IF WE ARE IN FIXED POINT NOTATION
@@ -17871,7 +17871,7 @@ F4      MAC     23-AUG-64 06:08         FLOATING POINT OUTPUT ROUTINE
   3218                                  53820           CP      FOTZER          ;WE DO, PUT IN ZEROS, THEY WILL LATER BE
   3219                                  53840                                   ; CONVERTED TO SPACES OR ASTERISKS BY FOUTZS
   3220                                  53860           PUSH    D               ;SAVE THE FIELD LENGTHS AGAIN
-  3221                                  53880           CALL    FOUTC1          ;CONVERT THE NUMBER TO DECIMAL DIGITS
+  3221                                  53880           CALL    FOUTCI          ;CONVERT THE NUMBER TO DECIMAL DIGITS
   3222                                  53900           POP     D               ;GET THE FIELD LENGTHS BACK
   3223                                  53920           ORA     E               ;DO WE NEED A DECIMAL POINT?  HERE A=0
   3224                                  53940           CZ      FOFXIS          ;WE DON'T, BACKSPACE OVER IT.  AT FOFXIS,
