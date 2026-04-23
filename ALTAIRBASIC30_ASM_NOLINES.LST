@@ -27,11 +27,11 @@ IFE     LENGTH,<
         CONSSW==0
         CONTRW==0>
 IFE     LENGTH-1,<
-        EXTFUN==1
+        EXTFNC==1
         MULDIM==1
         STRING==1>
 IFE     LENGTH-2,<
-        EXTFUN==1
+        EXTFNC==1
         MULDIM==1
         STRING==1>
 DEFINE  SYNCHK(A),<RST  1
@@ -1333,7 +1333,7 @@ REASON: PUSH    D               ;SAVE [D,E]
         XCHG                    ;RESTORE [H,L] FROM [D,E]
         POP     D               ;GET [D,E] BACK
         RNC                     ;WAS OK?
-OMERR:  MVI     E,EEPROM        ;"OUT OF MEMORY"
+OMERR:  MVI     E,ERROM         ;"OUT OF MEMORY"
 IFE     LENGTH,<
         XWD     ^O1000,1>       ;"LXI B," OVER THE NEXT 2
 IFN     LENGTH,<
@@ -2161,7 +2161,7 @@ IFE     REALIO,<
 DDT:    POP     B
         HRRZ    14,JOBDDT##
         JRST    0(14)>
-IFN     LENFTH,<
+IFN     LENGTH,<
 CONT:   RNZ                     ;MAKE SURE THERE IS A TERMINATOR
         MVI     E,ERRCN
         LHLD    OLDTXT          ;A STORED TEXT POINTER OF
@@ -3398,7 +3398,7 @@ APPLOP: POP     B               ;[B]=STACK OPERAND VALUE TYPE
         CPI     8               ;PRECISION ENTRY ON THE STACK
         JZ      STKDBL          ;FORCE FAC TO DOUBLE
         LDA     VALTYP          ;SEE IF THE FAC IS DOUBLE PRECISION
-        CPI     B               ;AND IF SO, CONVERT THE STACK OPERAND
+        CPI     8               ;AND IF SO, CONVERT THE STACK OPERAND
         JZ      FACDBL          ;TO DOUBLE PRECISION
         MOV     D,A             ;SAVE THE VALUE TYPE OF THE FAC
         MOV     A,B             ;SEE IF THE STACK ENTRY IS SINGLE
@@ -3660,7 +3660,7 @@ IFE     LENGTH-2,<
 ; NO CARRY              DBL=10          INT,STR,SNG
 ;
 GETYPE: LDA     VALTYP          ;GET THE VALTYP
-        CPI     B               ;SET CARRY CORRECTLY
+        CPI     8               ;SET CARRY CORRECTLY
         DCR     A               ;SET THE OTHER CONDITION CODE CORRECTLY
         DCR     A               ; WITHOUT AFFECTING CARRY
         DCR     A
@@ -3675,7 +3675,7 @@ ANDCON:
 IFN     STRING,<CALL    CHKNUM>
         CALL    DEINT           ;GET [D,E]=INT VALUE AND CHECK SIZE
         POP     PSW
-        XCHG                    [H,L]=INT VALUE
+        XCHG                    ;[H,L]=INT VALUE
         POP     0               ;GET HIGH ORDER OFF
         XTHL                    ;PUT INT VALUE ON
                                 ;GET LOW OF SECOND ARG OFF
@@ -3763,7 +3763,7 @@ STRCMP: PUSH    D               ;SAVE DESC. POINTER TO FIRST STR.
         POP     H               ;GET 2ND CHARACTER POINTER IN H
         XTHL                    ;GET 2ND CHARACTER COUNTER IN L
         MOV     D,L>            ;SAVE IN D
-IFN     LENGTH-2,<
+IFE     LENGTH-2,<
 STRCMP: CALL    FRESTR          ;FREE UP THE FAC STRING, AND GET THE
                                 ;POINTER TO THE FAC DESCRIPTOR IN [H,L]
         MOV     A,M             ;SAVE THE LENGTH OF THE FAC STRING IN [A]
@@ -3941,7 +3941,7 @@ NOSEC:
 IFE     LENGTH-2,<
         LXI     D,HAVTYP        ;SAVE JUMPS BY USING RETURN ADDRESS
         PUSH    D
-        MVI     D,B             ;ASSUME ITS DOUBLE PRECISION
+        MVI     D,8             ;ASSUME ITS DOUBLE PRECISION
         CPI     "#"             ;CHECK THE CHARACTER
         RZ                      ;WHEN WE MATCH, SETUP VALTYP
         MVI     D,2             ;CHECK FOR INTEGER
@@ -4234,7 +4234,7 @@ LOPFDA: DAD     D               ;SKIP OVER THIS ARRAY SINCE IT'S
         COMPAR                  ;STOPPING TIME?
 IFE     LENGTH-2,<
         LDA     VALTYP>
-        JZ      NOTFDO          ;YES,COULDN'T FIND THIS ARRAY
+        JZ      NOTFDD          ;YES,COULDN'T FIND THIS ARRAY
 IFE     LENGTH-2,<
         CMP     M               ;SEE IF THE VALTYPS ARE THE SAME
         INX     H
@@ -4298,7 +4298,7 @@ BSERR:  MVI     E,ERRBS         ;"SUBSCRIPT OUT OF RANGE"
 ;       OTHERWISE INDEX INTO THE VARIABLE AS IF IT
 ;       WERE FOUND ON THE INITIAL SEARCH
 ;
-NOTFOD:
+NOTFDD:
 IFE     LENGTH-2,<
         MOV     M,A             ;PUT DOWN THE VARIABLE TYPE
         INX     H
@@ -7406,7 +7406,7 @@ DNEGR1: MOV     A,C             ;GET A ZERO
         ;ALTERS A,C,D,E,H,L
 DSHFTR: LXI     H,DFACLO-1      ;GET POINTER TO LO
         MVI     M,0             ;PUT ZERO IN EXTRA LO ORDER BYTE
-DSHFT1: SUI     10              ;SEE IF WE CAN SHIFT 8 RIGHT
+DSHFR1: SUI     10              ;SEE IF WE CAN SHIFT 8 RIGHT
         JC      DSHFR3          ;WE CAN'T, CHECK IF WE ARE DONE
 DSHFRM: LXI     H,FAC-1         ;ENTRY FROM DMULT, GET POINTER TO HO
         MVI     E,0             ;SHIFT A ZERO INTO THE HO
@@ -8159,7 +8159,7 @@ FOUT2:  INX     H               ;POINT TO WHERE THE NEXT CHARACTER GOES
         JC      FOUTFX          ;THE MAN WANTS FIXED FORMATTED OUTPUT
         ;HERE TO PRINT NUMBERS IN FREE FORMAT
         POP     B               ;WE CAN IGNORE THE OLD B AND C
-        MVI     "0"             ;PUT A ZERO IN THE BUFFER IN CASE THE NUMBER
+        MVI     M,"0"           ;PUT A ZERO IN THE BUFFER IN CASE THE NUMBER
         JZ      FOUTZR          ; IS ZERO.  IT IS, FINISH IT UP
         CPI     4               ;DECIDE WHAT KIND OF A VALUE WE HAVE
         JNC     FOUFRV          ;WE HAVE A SNG OR DBL
@@ -8249,7 +8249,7 @@ FOFRS2: DCX     H               ;MOVE BACK TO THE LAST CHARACTER
         MOV     A,M             ;GET IT AND SEE IF IT WAS ZERO
         CPI     "0"
         JZ      FOFRS2          ;IT WAS, CONTINUE SUPPRESSING
-        COU     "."             ;HAVE WE SUPPRESSED ALL THE FRACTIONAL DIGITS?
+        CPI     "."             ;HAVE WE SUPPRESSED ALL THE FRACTIONAL DIGITS?
         CNZ     INXHRT          ;YES, IGNORE THE DECIMAL POINT ALSO
         POP     PSW             ;GET THE EXPONENT BACK
         JZ      FOUTON          ;WE ARE DONE IF WE ARE IN FIXED POINT NOTATION
@@ -8317,7 +8317,7 @@ FOUTFC: CPI     4               ;CHECK WHAT KIND OF VALUE WE HAVE
         CP      FOTZER          ;WE DO, PUT IN ZEROS, THEY WILL LATER BE
                                 ; CONVERTED TO SPACES OR ASTERISKS BY FOUTZS
         PUSH    D               ;SAVE THE FIELD LENGTHS AGAIN
-        CALL    FOUTC1          ;CONVERT THE NUMBER TO DECIMAL DIGITS
+        CALL    FOUTCI          ;CONVERT THE NUMBER TO DECIMAL DIGITS
         POP     D               ;GET THE FIELD LENGTHS BACK
         ORA     E               ;DO WE NEED A DECIMAL POINT?  HERE A=0
         CZ      FOFXIS          ;WE DON'T, BACKSPACE OVER IT.  AT FOFXIS,
