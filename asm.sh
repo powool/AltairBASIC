@@ -8,16 +8,15 @@
 # make
 # copy binaries somewhere in your $PATH
 
-dir=$(dirname "$1")
 base=$(basename "$1" .asm)
-base=$(basename $base .ASM)
+# base=$(basename $base .ASM)
 
-asl -l -cpu 8080 "$1" > $dir/$base.tmp
-if grep '^PASS 2' < $dir/$base.tmp ; then
-	awk 'BEGIN {p = 0;} { if(p) print; } /^PASS 2/ { p = 1;}' $dir/$base.tmp > $dir/$base.lst
-	rm $dir/$base.tmp
+asl -l -cpu 8080 "$1" > $base.tmp
+if grep '^PASS 2' < $base.tmp ; then
+	awk 'BEGIN {p = 0;} { if(p) print; } /^PASS 2/ { p = 1;}' $base.tmp > $base.lst
+	rm $base.tmp
 else
-	mv $dir/$base.tmp $dir/$base.lst
+	mv $base.tmp $base.lst
 fi
 if [ $? -ne 0 ] ; then
 	echo "Assembly failed. Script terminating."
@@ -27,5 +26,6 @@ fi
 # asl will correctly string either .ASM or .asm,
 # so do that here:
 
-p2hex -F Intel $dir/$base.p
+p2hex -F Intel $base.p
 
+hex2bin $base.hex
