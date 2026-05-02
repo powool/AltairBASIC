@@ -48,12 +48,19 @@ Initially, we have a simulator program that correctly runs the reference
 binary. It can be used to examine instruction sequences as it progresses
 through program start, initialization, and simple statements.
 
-The simulator is in the directory i8080\_core, the main program is i8080\_core/i8080\_test.cpp.
+The simulator has been moved to a new file named i8080tool. It is in the
+search path. It has options to either emulate the loaded code, or to
+disassemble it. In either case, a pre-existing symbol table file can
+be loaded. When pre-loading the symbol table, dump or disassembly
+will show labels if they can be found.
+
+Whether you start the reference basic or the asm basic, about the same
+input is automatically provided to the emulator.
+
+BASIC interpreter output goes to stdout. Instruction/CPU dump goes to stderr.
 
 Notably, the simulator can dump program state, with Intel 8080 source disassembly.
 It can also limit execution to a small number of instructions.
-Lastly, the keyboard input, implemented in i8080\_hal.c will first emulate
-the user typing the keystrokes to handle the initial setup of the reference.
 
 Because the available ALTAIRBASIC30.asm is older, it will not have the same
 exact startup after asking about available memory.
