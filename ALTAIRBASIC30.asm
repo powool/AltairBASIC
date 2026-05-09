@@ -10524,6 +10524,9 @@ FOUTNV:
 	XRA	A		;ZERO THE EXPONENT
 	PUSH	PSW		;SAVE IT
 	CALL	FOUNSC		;IS THE FAC TOO BIG OR TOO SMALL?
+; XXX FOUNS1 compares only a SNG, the reference
+; gets the type and compares SNG or DBL, with
+; the DBL constant at L3675
 FOUNS1:
 	MOVRI	145,67,79,248		;GET 99999.9499 TO SEE IF THE FAC IS BIG
 	CALL	FCOMP		; ENOUGH YET
@@ -10553,9 +10556,24 @@ FOUNSC:
 ; XXX NOT IMPLEMENTED
 FOUTND:				;normalize double
 FOTZRC:				;convert to decimal digits
-FOTZER:				;zero fill
 FOUTFX:				;fixed formatter output
 	RET
+
+; FOTZER is copied from reference/4.1
+FOTZER:	ORA	A
+FOTZE1:	RZ
+	DCR	A
+	MVI	M,'0'
+	INX	H
+	JMP	FOTZE1
+L356A:	JNZ	FOTZER
+L356D:	RZ
+	CALL	FOUTDP
+;zero fill
+L3571:	MVI	M,'0'
+	INX	H
+	DCR	A
+	JMP	L356D
 
 	;CONVERT THE SINGLE PRECISION FAC TO DECIMAL DIGITS IN THE BUFFER
 	;ON ENTRY: B = DECIMAL POINT COUNT, C = COMMA COUNT
