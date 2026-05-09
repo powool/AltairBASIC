@@ -1814,7 +1814,7 @@ BASIC MCS 8080  GATES/ALLEN/DAVIDOFF    MACRO 47(113) 03:12 10-SEP-75 PAGE 4-7
 F3      MAC      6-SEP-64 03:11         DISPATCH TABLES,RESERVED WORDS, ERROR TEXT... ALL CONSTANT
 
   1266  001027' 000000  000000
-  1267                  000004          21820           ERROD==Q"
+  1267                  000004          21820           ERROD==Q
   1268                                  21840           DCE"FC"
   1269  001030' 000000  000111          21860           DCL"ILLEGAL FUNCTION CALL"
   1270  001031' 000000  000114
@@ -4494,7 +4494,7 @@ BASIC MCS 8080  GATES/ALLEN/DAVIDOFF    MACRO 47(113) 03:12 10-SEP-75 PAGE 12-4
 F3      MAC      6-SEP-64 03:11         RESTORE,STOP,END,LINGET,CHRCON
 
   3194  003667' 001000  000361          46500           POP     PSW
-  3195  003670' 001000  000326          46520           SUI     "O"
+  3195  003670' 001000  000326          46520           SUI     "0"
   3196  003671' 000000  000060
   3197  003672' 001000  000137          46540           MOV     E,A
   3198  003673' 001000  000026          46560           MVI     D,0
@@ -5864,7 +5864,7 @@ F3      MAC      6-SEP-64 03:11         INPUT AND READ CODE
   4123                                  59200   ;
   4124  005001' 001000  000325          59220           PUSH    D               ;SAVE THE POINTER TO THE VARIABLE WE
   4125                                  59240                                   ;ARE ABOUT TO SET UP WITH A VALUE
-  4126  005002' 001000  000176          59260           MOV     A,H             ;SINCE THE DATA LIST POINTER ALWAYS POINTS
+  4126  005002' 001000  000176          59260           MOV     A,M             ;SINCE THE DATA LIST POINTER ALWAYS POINTS
   4127                                  59280                                   ;AT A TERMINATOR LETS READ THE
   4128                                  59300                                   ;TERMINATOR INTO [A] AND SEE WHAT
   4129                                  59320                                   ;IT IS
@@ -5974,7 +5974,7 @@ F3      MAC      6-SEP-64 03:11         INPUT AND READ CODE
   4205  005062' 000000  005054'
   4206  005063' 001000  000343          60360           XTHL                    ;[H,L]=PLACE TO STORE VARIABLE VALUE
   4207  005064' 001000  000325          60380           PUSH    D               ;TEXT POINTER GOES ON
-  4208  005065' 001000  000303          60400           JMP     INPCON>         ;DO ASSIGNMENT
+  4208  005065' 001000  000303          60400           JMP     INPCOM>         ;DO ASSIGNMENT
   4209  005066' 000000  004157'
   4210  005067' 000000  005061'
   4211  005070' 001000  000327          60420   NUMINS: CHRGET
@@ -6108,7 +6108,7 @@ F3      MAC      6-SEP-64 03:11         INPUT AND READ CODE
   4311  005175' 001000  000260          61660           ORA     B
   4312  005176' 001000  000036          61680           MVI     E,ERROD         ;NO DATA IS ERROR ERROD
   4313  005177' 000000  000004
-  4314  005200' 001000  000312          61700           JNZ     ERROR           ;IF SO COMPLAIN
+  4314  005200' 001000  000312          61700           JZ      ERROR           ;IF SO COMPLAIN
   4315  005201' 000000  002102'
   4316  005202' 000000  005170'
   4317                                  61720   IFE     LENGTH,<INX     H>      ;SKIP PAST LINE #
@@ -9719,7 +9719,7 @@ F3      MAC      6-SEP-64 03:11         STRING FUNCTIONS
 BASIC MCS 8080  GATES/ALLEN/DAVIDOFF    MACRO 47(113) 03:12 10-SEP-75 PAGE 26-9
 F3      MAC      6-SEP-64 03:11         STRING FUNCTIONS
 
-  6929  010335' 001000  000176          35240           MOV     A,H
+  6929  010335' 001000  000176          35240           MOV     A,M
   6930  010336' 001000  000345          35260           PUSH    H               ;SAVE DESC. POINTER.
   6931  010337' 001000  000052          35280           LHLD    FACLO           ;GET POINTER TO 2ND DESC.
   6932  010340' 000000  001637'
@@ -9962,7 +9962,7 @@ F3      MAC      6-SEP-64 03:11         STRING FUNCTIONS
   7127  010556' 001000  000343          38040   LEFT3:  XTHL                    ;SAVE THE TEXT POINTER
   7128  010557' 001000  000117          38060           MOV     C,A             ;OFFSET NOW IN [C]
   7129  010560' 001000  000345          38080   LEFT2:  PUSH    H               ;SAVE DESC. FOR  FRETMP
-  7130  010561' 001000  000176          38100           MOV     A,H             ;GET STRING LENGTH
+  7130  010561' 001000  000176          38100           MOV     A,M             ;GET STRING LENGTH
   7131  010562' 001000  000270          38120           CMP     B               ;ENTIRE STRING WANTED?
   7132  010563' 001000  000332          38140           JC      ALLSTR          ;IF #CHARS ASKED FOR.GE.LENGTH.YES
   7133  010564' 000000  010570'
@@ -13691,7 +13691,7 @@ F4      MAC     23-AUG-64 06:08         FLOATING POINT ADDITION AND SUBTRACTION
    299  000125' 001000  000257          03700   FADD3:  XRA     A               ;SBUBTRACT NUBMERS, NEGATE UNDERFLOW BYTE
    300  000126' 001000  000220          03720           SUB     B
    301  000127' 001000  000107          03740           MOV     B,A             ;SAVE IT
-   302  000130' 001000  000176          03760           MOV     A,H             ;SUBTRACT LOW ORDERS
+   302  000130' 001000  000176          03760           MOV     A,M             ;SUBTRACT LOW ORDERS
    303  000131' 001000  000233          03780           SBB     E
    304  000132' 001000  000137          03800           MOV     E,A
    305  000133' 001000  000043          03820           INX     H               ;UPDATE POINTER TO NEXT BYTE
@@ -14108,7 +14108,7 @@ F4      MAC     23-AUG-64 06:08         NATURAL LOG FUNCTION
    610  000425' 001000  000041          09060           LXI     H,FAC           ;GET POINTER TO EXPONENT
    611  000426' 000000  000235*
    612  000427' 000000  000423'
-   613  000430' 001000  000176          09080           MOV     A,H             ;GET EXPONENT IN A
+   613  000430' 001000  000176          09080           MOV     A,M             ;GET EXPONENT IN A
    614  000431' 001000  000001          09100           MOVRI   200,065,004,363 ;GET SQR(.5)
    615  000432' 000000  000065
    616  000433' 000000  000200
