@@ -1041,7 +1041,7 @@
 21760           ERRRG==Q
 21780           DCE"OD"
 21800           DCL"OUT OF DATA"
-21820           ERROD==Q"
+21820           ERROD==Q
 21840           DCE"FC"
 21860           DCL"ILLEGAL FUNCTION CALL"
 21880           ERRFC==Q
@@ -2263,7 +2263,7 @@
 46460           DAD     D
 46480           DAD     H               ;PUTTING [D,E]*10 INTO [H,L]
 46500           POP     PSW
-46520           SUI     "O"
+46520           SUI     "0"
 46540           MOV     E,A
 46560           MVI     D,0
 46580           DAD     D               ;ADD THE NEW DIGIT
@@ -2910,7 +2910,7 @@
 59200   ;
 59220           PUSH    D               ;SAVE THE POINTER TO THE VARIABLE WE
 59240                                   ;ARE ABOUT TO SET UP WITH A VALUE
-59260           MOV     A,H             ;SINCE THE DATA LIST POINTER ALWAYS POINTS
+59260           MOV     A,M             ;SINCE THE DATA LIST POINTER ALWAYS POINTS
 59280                                   ;AT A TERMINATOR LETS READ THE
 59300                                   ;TERMINATOR INTO [A] AND SEE WHAT
 59320                                   ;IT IS
@@ -2967,7 +2967,7 @@
 60340           LXI     H,STRDN2        ;RETURN LOC
 60360           XTHL                    ;[H,L]=PLACE TO STORE VARIABLE VALUE
 60380           PUSH    D               ;TEXT POINTER GOES ON
-60400           JMP     INPCON>         ;DO ASSIGNMENT
+60400           JMP     INPCOM>         ;DO ASSIGNMENT
 60420   NUMINS: CHRGET
 60440           CALL    FIN
 60460   IFE     LENGTH-2,<
@@ -3031,7 +3031,7 @@
 61640           MOV     A,C             ;SEE IF WE ARE AT THE END
 61660           ORA     B
 61680           MVI     E,ERROD         ;NO DATA IS ERROR ERROD
-61700           JNZ     ERROR           ;IF SO COMPLAIN
+61700           JZ      ERROR           ;IF SO COMPLAIN
 61720   IFE     LENGTH,<INX     H>      ;SKIP PAST LINE #
 61740   IFN     LENGTH,<POP     B>
 61760           MOV     E,M             ;GET DATA LINE #
@@ -4950,7 +4950,7 @@
 35180           CALL    EVAL            ;EVALUATE REST OF FORMULA
 35200           XTHL                    ;SAVE TEXT POINTER, GET BACK DESC.
 35220           CALL    CHKSTR
-35240           MOV     A,H
+35240           MOV     A,M
 35260           PUSH    H               ;SAVE DESC. POINTER.
 35280           LHLD    FACLO           ;GET POINTER TO 2ND DESC.
 35300           PUSH    H               ;SAVE IT
@@ -5091,7 +5091,7 @@
 38040   LEFT3:  XTHL                    ;SAVE THE TEXT POINTER
 38060           MOV     C,A             ;OFFSET NOW IN [C]
 38080   LEFT2:  PUSH    H               ;SAVE DESC. FOR  FRETMP
-38100           MOV     A,H             ;GET STRING LENGTH
+38100           MOV     A,M             ;GET STRING LENGTH
 38120           CMP     B               ;ENTIRE STRING WANTED?
 38140           JC      ALLSTR          ;IF #CHARS ASKED FOR.GE.LENGTH.YES
 38160           MOV     A,B             ;GET TRUNCATED LENGTH OF STRING
@@ -5896,7 +5896,7 @@
 03700   FADD3:  XRA     A               ;SBUBTRACT NUBMERS, NEGATE UNDERFLOW BYTE
 03720           SUB     B
 03740           MOV     B,A             ;SAVE IT
-03760           MOV     A,H             ;SUBTRACT LOW ORDERS
+03760           MOV     A,M             ;SUBTRACT LOW ORDERS
 03780           SBB     E
 03800           MOV     E,A
 03820           INX     H               ;UPDATE POINTER TO NEXT BYTE
@@ -6139,7 +6139,7 @@
 09020                                   ;FSIGN ONLY RETURNS 0,1 OR 377 IN A
 09040                                   ;THE PARITY WILL BE EVEN IF A HAS 0 OR 377
 09060           LXI     H,FAC           ;GET POINTER TO EXPONENT
-09080           MOV     A,H             ;GET EXPONENT IN A
+09080           MOV     A,M             ;GET EXPONENT IN A
 09100           MOVRI   200,065,004,363 ;GET SQR(.5)
 09120           SUB     B               ;REMOVE EXCESS 200
 09140           PUSH    PSW             ;SAVE EXPONENT FOR LATER

@@ -1041,7 +1041,7 @@ IFE     LENGTH-2,<
         ERRRG==Q
         DCE"OD"
         DCL"OUT OF DATA"
-        ERROD==Q"
+        ERROD==Q
         DCE"FC"
         DCL"ILLEGAL FUNCTION CALL"
         ERRFC==Q
@@ -2263,7 +2263,7 @@ MORLIN: CHRGET
         DAD     D
         DAD     H               ;PUTTING [D,E]*10 INTO [H,L]
         POP     PSW
-        SUI     "O"
+        SUI     "0"
         MOV     E,A
         MVI     D,0
         DAD     D               ;ADD THE NEW DIGIT
@@ -2910,7 +2910,7 @@ LOPDT2: SYNCHK  44              ;MAKE SURE THERE IS A ","
 ;
         PUSH    D               ;SAVE THE POINTER TO THE VARIABLE WE
                                 ;ARE ABOUT TO SET UP WITH A VALUE
-        MOV     A,H             ;SINCE THE DATA LIST POINTER ALWAYS POINTS
+        MOV     A,M             ;SINCE THE DATA LIST POINTER ALWAYS POINTS
                                 ;AT A TERMINATOR LETS READ THE
                                 ;TERMINATOR INTO [A] AND SEE WHAT
                                 ;IT IS
@@ -2967,7 +2967,7 @@ DOASIG: POP     PSW>            ;POP OFF THE TYPE INFORMATION
         LXI     H,STRDN2        ;RETURN LOC
         XTHL                    ;[H,L]=PLACE TO STORE VARIABLE VALUE
         PUSH    D               ;TEXT POINTER GOES ON
-        JMP     INPCON>         ;DO ASSIGNMENT
+        JMP     INPCOM>         ;DO ASSIGNMENT
 NUMINS: CHRGET
         CALL    FIN
 IFE     LENGTH-2,<
@@ -3031,7 +3031,7 @@ IFN     LENGTH,<
         MOV     A,C             ;SEE IF WE ARE AT THE END
         ORA     B
         MVI     E,ERROD         ;NO DATA IS ERROR ERROD
-        JNZ     ERROR           ;IF SO COMPLAIN
+        JZ      ERROR           ;IF SO COMPLAIN
 IFE     LENGTH,<INX     H>      ;SKIP PAST LINE #
 IFN     LENGTH,<POP     B>
         MOV     E,M             ;GET DATA LINE #
@@ -4950,7 +4950,7 @@ CAT:    PUSH    B               ;PUT OLD PRECEDENCE BACK ON
         CALL    EVAL            ;EVALUATE REST OF FORMULA
         XTHL                    ;SAVE TEXT POINTER, GET BACK DESC.
         CALL    CHKSTR
-        MOV     A,H
+        MOV     A,M
         PUSH    H               ;SAVE DESC. POINTER.
         LHLD    FACLO           ;GET POINTER TO 2ND DESC.
         PUSH    H               ;SAVE IT
@@ -5091,7 +5091,7 @@ LEFT$:  CALL    PREAM           ;TEST THE PARAMETERS
 LEFT3:  XTHL                    ;SAVE THE TEXT POINTER
         MOV     C,A             ;OFFSET NOW IN [C]
 LEFT2:  PUSH    H               ;SAVE DESC. FOR  FRETMP
-        MOV     A,H             ;GET STRING LENGTH
+        MOV     A,M             ;GET STRING LENGTH
         CMP     B               ;ENTIRE STRING WANTED?
         JC      ALLSTR          ;IF #CHARS ASKED FOR.GE.LENGTH.YES
         MOV     A,B             ;GET TRUNCATED LENGTH OF STRING
@@ -5896,7 +5896,7 @@ IFN     LENGTH,<
 FADD3:  XRA     A               ;SBUBTRACT NUBMERS, NEGATE UNDERFLOW BYTE
         SUB     B
         MOV     B,A             ;SAVE IT
-        MOV     A,H             ;SUBTRACT LOW ORDERS
+        MOV     A,M             ;SUBTRACT LOW ORDERS
         SBB     E
         MOV     E,A
         INX     H               ;UPDATE POINTER TO NEXT BYTE
@@ -6139,7 +6139,7 @@ LOG:    FSIGN                   ;CHECK FOR A NEGATIVE OR ZERO ARGUMENT
                                 ;FSIGN ONLY RETURNS 0,1 OR 377 IN A
                                 ;THE PARITY WILL BE EVEN IF A HAS 0 OR 377
         LXI     H,FAC           ;GET POINTER TO EXPONENT
-        MOV     A,H             ;GET EXPONENT IN A
+        MOV     A,M             ;GET EXPONENT IN A
         MOVRI   200,065,004,363 ;GET SQR(.5)
         SUB     B               ;REMOVE EXCESS 200
         PUSH    PSW             ;SAVE EXPONENT FOR LATER
