@@ -15,15 +15,18 @@ This source is used by an accompanying project to explore and educate others abo
 | ALTAIRBASIC30.LST     | The master transcribed file from which all others are generated     |
 | ALTAIRBASIC30_ASM_LINES.LST   | All source with only assembly including line numbers   |
 | ALTAIRBASIC30_ASM_NOLINES.LST   | All source with only assembly without line numbers  |
-| ALTAIRBASIC30_asm   | Incomplete assembly code for the 8080 BASIC interpreter  |
+| ALTAIRBASIC30.asm   | Mostly functional assembly code for the 8080 BASIC interpreter version 3.0 |
+| ALTAIRBASIC30.sym | symbol table generated from the asm.sh script |
+| 'Extended BASIC Ver 4-1.tap'  | Believed good binary reference of a later version (4.1) of the same code|
+| 'Extended BASIC Ver 4-1.sym'  | Manual and automatically generated symbols of the 4.1 reference |
 
 
 ---
 
 ## Project goals
 
-We have an incomplete Intel 8080 assembler file ALTAIRBASIC30.asm. The existing
-assembly is an incomplete implementation of a BASIC interpreter.
+We have an mostly complete Intel 8080 assembler file ALTAIRBASIC30.asm. It implements
+a dialect of the BASIC programming language and will be referred to as Altair BASIC.
 
 Assembly routines that are not implemented are stubbed in with a RET instruction,
 and commented with XXX indicating it needs work.
@@ -41,6 +44,11 @@ manner.
 The ultimate goal is to finish ALTAIRBASIC30.asm so that it not only
 assembles to a binary, but also runs in a similar fashion as reference
 binaries that are known to be good and can run BASIC programs.
+
+It is not necessarily a goal to implement exactly what the refernce does.
+This may not be practical, and in any case, will tend to detract from
+an otherwise unstated goal of trying to keep the 3.0 assembly file as
+nearly origianal as we can.
 
 ## Tools
 
@@ -67,3 +75,36 @@ exact startup after asking about available memory.
 
 Depending on how things progress, we may need to implement new tools to help us.
 
+## Missing capabilities and subroutines
+
+At this point, Altair Basic 3.0 has most of the functionality it needs to run
+games.
+
+It has support for double precision arithmetic, which is only partly complete and
+definitely needs work.
+
+### Missing floating point routines
+
+ XXX NOT IMPLEMENTED
+FOUTND:                         ;normalize double
+FOTZRC:                         ;convert to decimal digits
+FOUTFX:                         ;fixed formatter output
+
+I implemented the previously missing FOTZER by disassembling the code
+from the reference/4.1 version and using that. It seems like a good
+fit, but it could have problems, for example, with incorrectly handling
+SNG vs DBL vs INTEGER types or destroying registers that the existing
+asm/3.0 code expected to preserve.
+
+So far, my attempts to disassemble the reference/4.1 version seems to be
+showing that the floating point routines in reference/4.1 evolved and
+diverged a bit more than expected from the asm/3.0 version.
+
+### Missing 'EDIT' command subroutines
+
+None of this EDIT command assembly code is available, so as a result, we need to find the entry
+point in the reference, disassemble it as best we can and see if we can implement that
+in Altair BASIC 3.0.
+
+It is an interfactive keyboard based line edit capability, and provides very
+simple edit function.
