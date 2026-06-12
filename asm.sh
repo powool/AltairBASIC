@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+# download ASL from:
+#
 # http://john.ccac.rwth-aachen.de:8000/as/
 #
 # untar, then:
@@ -23,7 +25,7 @@ if [ $? -ne 0 ] ; then
 	exit 1
 fi
 
-# asl will correctly string either .ASM or .asm,
+# asl will correctly handle either .ASM or .asm,
 # so do that here:
 
 p2hex -F Intel $base.p
